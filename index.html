@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#101827" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="apple-touch-icon" href="icon-192.svg" />
+  <title>Activity Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="extras.css" />
+</head>
+<body>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <a class="brand" href="#tracker"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M26 52 43 69 75 37"/></svg></span><span>Daily<br>Tracker</span></a>
+      <nav aria-label="Sahifalar">
+        <button class="nav-link active" data-view="tracker"><span>▦</span> Tracker</button>
+        <button class="nav-link" data-view="analytics"><span>◔</span> Analytics</button>
+      </nav>
+      <div class="sidebar-bottom"><button id="settingsButton" class="nav-link"><span>⚙</span> Sozlamalar</button><button id="themeButton" class="nav-link"><span>◐</span> Tema</button></div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar"><div><p class="eyebrow">SHAXSIY KUNLIK</p><h1 id="pageTitle">Yearly Activity</h1></div><div class="header-actions"><span id="syncStatus" class="sync-status saved" role="status">🟢 Saqlangan</span><button id="mobileSettings" class="icon-button" aria-label="Sozlamalar">⚙</button></div></header>
+      <section id="offlineBanner" class="notice warning hidden"></section>
+      <section id="summaryBanner" class="notice summary hidden"><span id="summaryText"></span><button class="notice-close" data-close-notice="summaryBanner">×</button></section>
+      <section id="backupBanner" class="notice backup hidden"><span>💾 Ma’lumotlaringizni zaxiralashni unutmang — GitHub’ga ulanmagansiz.</span><button class="notice-close" data-close-notice="backupBanner">×</button></section>
+      <section id="todayReminder" class="notice info hidden">✦ Bugun hali hech narsa qo‘shmagansiz.</section>
+
+      <section id="trackerView" class="view active">
+        <div class="page-lead"><div><p class="section-label">FAOLLIK KO‘RINISHI</p><h2>Yilingiz qanday o‘tyapti?</h2><p>Har bir kichik qadam katta natijaga aylanadi.</p></div><button id="addButton" class="primary">＋ Bugungi ishni qo‘shish</button></div>
+        <section class="metrics" aria-label="Statistika">
+          <article><span class="metric-icon">🔥</span><div><span>Joriy streak</span><strong id="currentStreakMetric">0 kun</strong></div></article>
+          <article><span class="metric-icon">🏆</span><div><span>Eng uzun streak</span><strong id="streakMetric">0 kun</strong></div></article>
+          <article><span class="metric-icon">✦</span><div><span>Bu oyda</span><strong id="monthMetric">0 ish</strong></div></article>
+          <article><span class="metric-icon">▣</span><div><span>Eng faol oy</span><strong id="activeMonthMetric">—</strong></div></article>
+        </section>
+        <section id="goalCard" class="goal-card hidden"><div class="goal-icon">🎯</div><div class="goal-copy"><strong>Oylik maqsad</strong><span id="goalText">0 / 0 ish</span></div><div class="progress-track"><i id="goalProgress"></i></div><b id="goalPercent">0%</b></section>
+        <section class="filter-row"><span>Filtrlash:</span><div id="tagFilters" class="tag-filters"></div></section>
+        <section class="search-card"><input id="searchInput" type="search" placeholder="Yozuvlarda qidirish..." aria-label="Yozuvlarda qidirish" /><div id="dateFilters" class="date-filters"><button data-range="7">7 kun</button><button data-range="30">30 kun</button><button data-range="90">90 kun</button><button data-range="year">Shu yil</button><button class="active" data-range="all">Barchasi</button></div></section>
+        <section id="searchResults" class="search-results hidden"></section>
+        <section class="activity-card">
+          <div class="card-top"><div class="year-nav"><button id="prevYear" aria-label="Oldingi yil">◀</button><strong id="yearLabel"></strong><button id="nextYear" aria-label="Keyingi yil">▶</button></div><div class="total"><b id="totalEvents">0</b><span>Total events<br>this year</span></div></div>
+          <div id="monthLabels" class="month-labels"></div>
+          <div class="graph-wrap"><div class="weekday-labels"><span>Du</span><span>Ch</span><span>Ju</span><span>Ya</span></div><div id="graph" class="graph" aria-label="Faollik grafigi"></div></div>
+          <div class="card-footer"><div class="key"><span>Key</span><i class="level-0"></i><span>Yo‘q</span><i class="level-1"></i><span>1 ish</span><i class="level-2"></i><span>2 ish</span><i class="level-3"></i><span>3+ ish</span></div></div>
+        </section>
+        <div class="toolbar"><button id="downloadButton" class="secondary">📥 Zaxira nusxa yuklab olish</button><span id="message" class="message" aria-live="polite"></span></div>
+      </section>
+
+      <section id="analyticsView" class="view">
+        <div class="page-lead"><div><p class="section-label">TAHLIL</p><h2>Faollik hisoboti</h2><p>Kategoriyalar va oylar bo‘yicha umumiy ko‘rinish.</p></div></div>
+        <section class="metrics analytics-metrics"><article><span class="metric-icon">▦</span><div><span>Jami ishlar</span><strong id="analyticsTotal">0</strong></div></article><article><span class="metric-icon">◌</span><div><span>O‘rtacha kunlik</span><strong id="analyticsAverage">0</strong></div></article><article><span class="metric-icon">☀</span><div><span>Eng faol kun</span><strong id="analyticsWeekday">—</strong></div></article><article><span class="metric-icon">↗</span><div><span>Bu oy o‘sishi</span><strong id="analyticsGrowth">—</strong></div></article></section>
+        <section class="comparison-row"><article><span>Bu hafta vs o‘tgan hafta</span><strong id="weeklyComparison">—</strong></article><article><span>Bu oy vs o‘tgan oy</span><strong id="monthlyComparison">—</strong></article></section>
+        <section class="analytics-grid"><article class="chart-card donut-card"><div class="card-heading"><div><h3>Kategoriya bo‘yicha</h3><p>Jami ishlar taqsimoti</p></div></div><canvas id="donutChart" width="360" height="280" aria-label="Kategoriya donut diagrammasi"></canvas><div id="donutLegend" class="donut-legend"></div></article><article class="chart-card bars-card"><div class="card-heading"><div><h3>Oylar bo‘yicha faollik</h3><p>Har oyda bajarilgan ishlar</p></div></div><canvas id="barChart" width="680" height="280" aria-label="Oylar bar diagrammasi"></canvas></article></section>
+        <section class="table-card"><div class="card-heading"><div><h3>Kategoriyalar</h3><p>Teglardan foydalanish tarixi</p></div></div><div class="table-wrap"><table><thead><tr><th>Kategoriya</th><th>Ishlar soni</th><th>Oxirgi ishlatilgan</th></tr></thead><tbody id="categoryTable"></tbody></table></div></section>
+        <section class="achievements-card"><div class="card-heading"><div><h3>Yutuqlar</h3><p>Har bir qadam — yangi belgi</p></div><span id="achievementCount" class="achievement-count">0 / 8</span></div><div id="achievementGrid" class="achievement-grid"></div></section>
+      </section>
+    </main>
+  </div>
+
+  <div id="entryModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="entryModalTitle"><div class="modal-box"><button class="close" data-close="entryModal" aria-label="Yopish">×</button><h2 id="entryModalTitle">Bugungi ishni qo‘shish</h2><form id="entryForm"><label>Sarlavha<input id="entryTitle" required maxlength="120" placeholder="Masalan: JavaScript darsi" /></label><label>Tavsif<textarea id="entryDescription" maxlength="600" placeholder="Qisqa izoh (ixtiyoriy)"></textarea></label><label>Teg / kategoriya<input id="entryTag" list="tagSuggestions" maxlength="30" placeholder="CTF, Kod, Ingliz tili..." /></label><datalist id="tagSuggestions"><option>CTF</option><option>Kod</option><option>Ingliz tili</option><option>Loyiha</option><option>O‘qish</option></datalist><button class="primary submit" type="submit">Saqlash va sinxronlash</button></form></div></div>
+  <div id="dayModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="dayModalTitle"><div class="modal-box"><button class="close" data-close="dayModal" aria-label="Yopish">×</button><h2 id="dayModalTitle">Kun yozuvlari</h2><div id="dayEntries"></div></div></div>
+  <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle"><div class="modal-box"><button class="close" data-close="settingsModal" aria-label="Yopish">×</button><h2 id="settingsModalTitle">⚙ Sozlamalar</h2><p class="help">GitHub → Settings → Developer settings → Personal access tokens bo‘limidan faqat <code>gist</code> ruxsatli token yarating. So‘ng gist.github.com saytida <code>activity-data.json</code> nomli faylga ega yangi Gist yarating va ID sini kiriting.</p><form id="settingsForm"><label>GitHub Personal Access Token<input id="tokenInput" type="password" autocomplete="off" placeholder="github_pat_..." /></label><label>Gist ID<input id="gistInput" autocomplete="off" placeholder="Gist URL dagi ID" /></label><label>Bu oydagi maqsad (ishlar soni)<input id="goalInput" type="number" min="1" max="10000" placeholder="Masalan: 20" /></label><label class="switch-line"><input id="reduceMotionInput" type="checkbox" /> Animatsiyalarni kamaytirish</label><label class="switch-line"><input id="soundInput" type="checkbox" /> Tovush effektlarini yoqish</label><label class="switch-line"><input id="summariesInput" type="checkbox" /> Haftalik va oylik xulosalar</label><div class="settings-subhead">Kategoriya ranglari</div><p class="help">Tanlangan rang diagramma, badge va jadvalda bir xil qo‘llanadi.</p><div id="tagColorSettings" class="tag-color-settings"></div><button class="primary submit" type="submit">Saqlash</button></form></div></div>
+  <div id="toastStack" class="toast-stack" aria-live="polite"></div><div id="confettiLayer" class="confetti-layer" aria-hidden="true"></div>
+  <div id="soundModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="soundTitle"><div class="modal-box sound-box"><h2 id="soundTitle">🔔 Yengil tovushlar</h2><p class="help">Yozuv saqlanganda kichik, yumshoq signal eshitilsinmi?</p><div class="sound-actions"><button id="soundYes" class="primary">Yoqish</button><button id="soundNo" class="secondary">Hozircha yo‘q</button></div></div></div>
+  <script src="script.js"></script>
+</body></html>
